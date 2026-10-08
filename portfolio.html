@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kofi — portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F8F3; --ink:#1B2420; --muted:#5B665F; --line:#D5DCD0; --accent:#4F7A2E; --sel:#E5ECDD;
+  --display:'Bricolage Grotesque',system-ui,sans-serif; --body:'Newsreader',Georgia,serif;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#121815;--ink:#E9EFE6;--muted:#9AA79E;--line:#2C3832;--accent:#8DBB62;--sel:#1E2923}
+}
+:root[data-theme="dark"]{--bg:#121815;--ink:#E9EFE6;--muted:#9AA79E;--line:#2C3832;--accent:#8DBB62;--sel:#1E2923}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:19px/1.6 var(--body)}
+a{color:var(--ink);text-decoration-color:var(--accent);text-underline-offset:3px;text-decoration-thickness:2px}
+a:hover{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{max-width:960px;margin:0 auto;padding:40px 24px 80px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 40px;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:40px}
+.site{font:700 1.7rem/1 var(--display);letter-spacing:-.02em;margin:0}
+nav{display:flex;gap:20px;font:500 1rem var(--display)}
+nav a{text-decoration:none;padding:4px 0;border-bottom:2px solid transparent}
+nav a[aria-current="page"]{border-color:var(--accent)}
+h2{font:700 1.5rem/1.2 var(--display);margin:0 0 20px}
+.intro{max-width:62ch;font-size:1.25rem;margin:0 0 24px}
+.muted,.meta{color:var(--muted);font-size:16px}
+.contact{list-style:none;padding:0;margin:0}
+.reader-grid{display:grid;grid-template-columns:280px 1fr;gap:48px}
+@media (max-width:760px){.reader-grid{grid-template-columns:1fr;gap:28px}}
+.pieces{list-style:none;margin:0;padding:0}
+.pieces button{all:unset;display:block;width:100%;box-sizing:border-box;cursor:pointer;padding:12px;border-top:1px solid var(--line)}
+.pieces li:last-child button{border-bottom:1px solid var(--line)}
+.pieces button:hover,.pieces button[aria-current="true"]{background:var(--sel)}
+.pieces button:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+.pieces .t{font:500 1.05rem/1.3 var(--display);display:block}
+.piece h3{font:700 1.8rem/1.15 var(--display);letter-spacing:-.02em;margin:0 0 4px}
+.piece .body{max-width:62ch;margin-top:20px}
+.item{padding:20px 0;border-top:1px solid var(--line)}
+.item:last-child{border-bottom:1px solid var(--line)}
+.item h3{font:500 1.2rem/1.3 var(--display);margin:0 0 2px}
+.item p{margin:0;max-width:62ch}
+.job{display:grid;grid-template-columns:140px 1fr;gap:24px}
+@media (max-width:560px){.job{grid-template-columns:1fr;gap:4px}}
+.job .when{color:var(--muted);font-size:16px;padding-top:4px}
+h3.sub{font:700 1.1rem/1.2 var(--display);margin:36px 0 8px}
+footer{margin-top:72px;color:var(--muted);font-size:15px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="site"><a href="#/" style="text-decoration:none">Kofi</a></p>
+    <nav aria-label="Main">
+      <a href="#/about" data-r="about">about</a>
+      <a href="#/research" data-r="research">research</a>
+      <a href="#/writing" data-r="writing">writing</a>
+      <a href="#/cv" data-r="cv">cv</a>
+      <a href="#/contact" data-r="contact">contact</a>
+    </nav>
+  </header>
+  <main id="view"></main>
+  <!-- EDIT: footer line -->
+  <footer>© 2026 Kofi</footer>
+</div>
+
+<script>
+/* =====================  EDIT YOUR CONTENT HERE  ===================== */
+
+// ABOUT: intro, optional image, and contact links
+const ABOUT = {
+  image: "",  // optional: a data: URI, or leave empty
+  intro: "Philosophy graduate of the University of Chicago. Write two or three sentences on your questions, your methods, and what you want to study next.",
+  contact: [
+    ["you@example.com", "mailto:you@example.com"],
+    ["CV (PDF)", "#"],
+    ["LinkedIn", "#"]
+  ]
+};
+
+// One-line statement shown under each section heading (leave "" to hide)
+const BLURBS = {
+  research: "Interests: philosophy, political theory, economics, critical theory.",
+  writing: "One sentence on what you write about.",
+  cv: ""
+};
+
+// RESEARCH: projects, papers in progress, reading groups
+const RESEARCH = [
+  { title:"Energy Theory of Value", meta:"CEGU · Year – present",
+    text:"Two or three sentences on the question, your approach, and where it stands." },
+  { title:"Another project or thesis", meta:"Institution or program · Year",
+    text:"Two or three sentences." }
+];
+
+// WRITING: one object per piece. "id" must be unique and URL-safe.
+// "body" is HTML (wrap each paragraph in <p>...</p>). Add "url" to link to a published version.
+const WRITING = [
+  { id:"first-paper",  title:"Title of your first paper",  meta:"Course, journal, or thesis · Month Year",
+    body:"<p>Paste the full text or an abstract here, one &lt;p&gt; per paragraph.</p><p>Second paragraph.</p>" },
+  { id:"second-paper", title:"Title of your second paper", meta:"Course, journal, or thesis · Month Year",
+    body:"<p>Paste the full text or an abstract here.</p>" },
+  { id:"third-paper",  title:"Title of your third paper",  meta:"Course, journal, or thesis · Month Year",
+    url:"#", body:"<p>Abstract. Readers get a link to the full paper.</p>" }
+];
+
+// CV: education, then experience (newest first)
+const EDUCATION = [
+  { when:"Year", title:"BA, Philosophy", meta:"University of Chicago",
+    text:"Thesis title, honors, relevant coursework." }
+];
+const EXPERIENCE = [
+  { when:"Years", title:"Role, Organization", meta:"City",
+    text:"What you did, in one specific sentence. Research, teaching, editing, and production roles all fit here." },
+  { when:"Years", title:"Freelance commercial production", meta:"Clients include Atlassian, Target, and Toyota",
+    text:"Say what your role was and what you delivered." }
+];
+
+/* ========================  PAGE LOGIC (no edits needed)  ======================== */
+const view = document.getElementById('view');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const blurb = k => BLURBS[k] ? `<p class="intro">${esc(BLURBS[k])}</p>` : '';
+const rows = a => a.map(j =>
+  `<article class="item job"><div class="when">${esc(j.when)}</div><div><h3>${esc(j.title)}</h3><p class="meta">${esc(j.meta)}</p><p>${esc(j.text)}</p></div></article>`).join('');
+
+function about(){
+  return `<p class="intro">${esc(ABOUT.intro)}</p>` +
+    (ABOUT.image ? `<img src="${esc(ABOUT.image)}" alt="" style="max-width:100%;height:auto">` : '');
+}
+function research(){
+  return `<h2>Research</h2>${blurb('research')}` + RESEARCH.map(r =>
+    `<article class="item"><h3>${esc(r.title)}</h3><p class="meta">${esc(r.meta)}</p><p>${esc(r.text)}</p></article>`).join('');
+}
+function writing(id){
+  const p = WRITING.find(w => w.id === id);
+  const list = WRITING.map(w =>
+    `<li><button data-id="${esc(w.id)}" ${p&&p.id===w.id?'aria-current="true"':''}><span class="t">${esc(w.title)}</span><span class="meta">${esc(w.meta)}</span></button></li>`).join('');
+  const reader = p
+    ? `<article class="piece"><h3>${esc(p.title)}</h3><div class="meta">${esc(p.meta)}</div><div class="body">${p.body}</div>${
+        p.url ? `<p><a href="${esc(p.url)}">Read the full piece</a></p>` : ''}</article>`
+    : `<p class="muted">Select a piece to read.</p>`;
+  return `<h2>Writing</h2>${blurb('writing')}<div class="reader-grid"><ul class="pieces">${list}</ul><div>${reader}</div></div>`;
+}
+function cv(){
+  return `<h2>CV</h2>${blurb('cv')}<h3 class="sub">Education</h3>${rows(EDUCATION)}<h3 class="sub">Experience</h3>${rows(EXPERIENCE)}`;
+}
+function contact(){
+  return `<h2>Contact</h2><ul class="contact">${
+    ABOUT.contact.map(([l,h]) => `<li><a href="${esc(h)}">${esc(l)}</a></li>`).join('')}</ul>`;
+}
+const ROUTES = {about, research, cv, contact};
+function render(){
+  const [, route = 'about', id] = (location.hash || '#/about').replace('#','').split('/');
+  const r = route === 'writing' || ROUTES[route] ? route : 'about';
+  view.innerHTML = r === 'writing' ? writing(id) : ROUTES[r]();
+  document.querySelectorAll('nav a').forEach(a => {
+    if (a.dataset.r === r) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
+  });
+  view.querySelectorAll('.pieces button').forEach(b =>
+    b.addEventListener('click', () => { location.hash = '#/writing/' + b.dataset.id; }));
+}
+addEventListener('hashchange', render);
+render();
+</script>
+</body>
+</html>
